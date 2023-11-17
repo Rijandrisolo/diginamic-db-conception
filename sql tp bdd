@@ -1,0 +1,55 @@
+DROP TABLE IF EXISTS players ;
+CREATE TABLE players (id_player BIGINT  AUTO_INCREMENT NOT NULL,
+nom_player VARCHAR(255),
+prenom_player VARCHAR(255),
+pseudo_player VARCHAR(255),
+phone_player VARCHAR(20),
+mail_player VARCHAR(255),
+skin_player VARCHAR(255),
+id_group BIGINT NOT NULL,
+PRIMARY KEY (id_player) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS parties ;
+CREATE TABLE parties (id_partie BIGINT  AUTO_INCREMENT NOT NULL,
+nom_partie VARCHAR(255),
+date_debut DATETIME,
+date_fin DATETIME,
+PRIMARY KEY (id_partie) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS cartes ;
+CREATE TABLE cartes (id_carte BIGINT  AUTO_INCREMENT NOT NULL,
+nom_carte VARCHAR(255),
+caracteristique TEXT,
+PRIMARY KEY (id_carte) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS groupe ;
+CREATE TABLE groupe (id_group BIGINT  AUTO_INCREMENT NOT NULL,
+groupe VARCHAR(255),
+PRIMARY KEY (id_group) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS score_global ;
+CREATE TABLE score_global (id_score BIGINT  AUTO_INCREMENT NOT NULL,
+score_total BIGINT,
+date_saisie DATETIME,
+id_partie BIGINT NOT NULL,
+PRIMARY KEY (id_score) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS joue ;
+CREATE TABLE joue (id_player BIGINT  AUTO_INCREMENT NOT NULL,
+id_partie BIGINT NOT NULL,
+PRIMARY KEY (id_player,
+ id_partie) ) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS utilise ;
+CREATE TABLE utilise (id_partie BIGINT  AUTO_INCREMENT NOT NULL,
+id_carte BIGINT NOT NULL,
+PRIMARY KEY (id_partie,
+ id_carte) ) ENGINE=InnoDB;
+
+ALTER TABLE players ADD CONSTRAINT FK_players_id_group FOREIGN KEY (id_group) REFERENCES groupe (id_group);
+
+ALTER TABLE score_global ADD CONSTRAINT FK_score_global_id_partie FOREIGN KEY (id_partie) REFERENCES parties (id_partie);
+ALTER TABLE joue ADD CONSTRAINT FK_joue_id_player FOREIGN KEY (id_player) REFERENCES players (id_player);
+ALTER TABLE joue ADD CONSTRAINT FK_joue_id_partie FOREIGN KEY (id_partie) REFERENCES parties (id_partie);
+ALTER TABLE utilise ADD CONSTRAINT FK_utilise_id_partie FOREIGN KEY (id_partie) REFERENCES parties (id_partie);
+ALTER TABLE utilise ADD CONSTRAINT FK_utilise_id_carte FOREIGN KEY (id_carte) REFERENCES cartes (id_carte);
